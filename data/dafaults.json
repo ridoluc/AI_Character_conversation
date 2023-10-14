@@ -1,0 +1,20 @@
+{
+   "NPC_role":[
+      "farmer",
+      "warrior",
+      "adventurer",
+      "merchant"
+   ],
+
+   "NPC_items":[
+
+   ],
+
+   "NPC_statistics":[
+      "strength",
+      "honesty"
+   ]
+
+
+   
+}
