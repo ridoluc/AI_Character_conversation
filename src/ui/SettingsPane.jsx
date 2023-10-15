@@ -11,7 +11,7 @@ import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import Stack from '@mui/joy/Stack';
 
-function SettingsPane() {
+function SettingsPane({model, onModelChange}) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (inOpen) => (event) => {
@@ -21,6 +21,43 @@ function SettingsPane() {
 
     setOpen(inOpen);
   };
+
+  const onMdlSelectionChange = (d) => {
+
+    switch (d) {
+      case "dummy":
+        onModelChange({...model, modelName: 0});
+        break;
+      case "gpt3":
+        onModelChange({
+          ...model,
+          modelName : 1,
+          settings:{
+            ...model.settings,
+            model:"gpt-3.5-turbo"
+          }}
+        )
+        break;
+      case "gpt4":
+        onModelChange({
+          ...model,
+          modelName : 1,
+          settings:{
+            ...model.settings,
+            model:"gpt-4"
+          }}
+        )
+        break;
+      default:
+        onModelChange({...model, modelName: 0});
+        break;
+    }
+    
+  }
+
+  const onApiChange = (d) => {
+    model.settings = {...model.settings, apiKey:d}
+  }
 
 
   return (
@@ -44,11 +81,12 @@ function SettingsPane() {
           <Typography level="h4"  >Settings</Typography>
 
           <FormControl size="sm">
-            <FormLabel>Gender</FormLabel>
-            <RadioGroup defaultValue="dummy" name="radio-buttons-group">
+            <FormLabel>Model</FormLabel>
+            <RadioGroup defaultValue="dummy" name="radio-buttons-group" onChange={(e) => onMdlSelectionChange(e.target.value)}>
               <Radio value="dummy" label="Dummy" />
               <Radio value="gpt3" label="GPT 3.5" />
               <Radio value="gpt4" label="GPT 4.0" />
+              <Radio value="local" label="Local (not used)" />
             </RadioGroup>
           </FormControl>
 
@@ -57,7 +95,7 @@ function SettingsPane() {
             size="sm"
           >
             <FormLabel sx={{ mr: "auto", pr: 3 }}>API Key</FormLabel>
-            <Input  placeholder="Write the API Key here" />
+            <Input  placeholder="Write the API Key here" onChange={(e) => onApiChange(e.target.value)}/>
           </FormControl>
             </Stack>
         </Box>

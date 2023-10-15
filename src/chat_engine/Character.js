@@ -1,15 +1,17 @@
 import { LLM_Model } from "./LLM_Model.js";
 
 export class Character {
-	constructor(id, LLM_model, data) {
+	constructor(id, LLM_model, data={}) {
 		this.id = id;
 		this.ai_model = LLM_model;
 		this.name = data.name || null;
 		this.role = data.role || null;
+		this.social_class = null;
+		this.location = null
 		this.background = data.background || null;
 		this.inventory = {
-			gold: data.inventory.gold || 0,
-			items: data.inventory.items || null,
+			gold: 0,
+			items: null,
 		};
 		this.statistics = data.statistics || null;
 	}
@@ -18,7 +20,7 @@ export class Character {
 	 * Generate the character background
 	 */
 	async generateBackground() {
-		const prompt = `Write the background and name for an RPG character with role: ${this.role} in less than 150 tokens. Return a JSON object containing "background" and "name" properties`;
+		const prompt = `Write the background story and name for an RPG character with role: ${this.role} in less than 150 tokens. Return a JSON object containing "background" and "name" properties`;
 
 		const messages = [];
 		messages.push(LLM_Model.createRoleContentPair("user", prompt));

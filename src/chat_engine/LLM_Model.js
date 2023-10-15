@@ -9,7 +9,7 @@ export class LLM_Model {
 	 * @param {string} model - The model name (e.g., 'dummy' or 'open_ai').
 	 * @param {Object} settings - Model-specific settings and API key.
 	 */
-	constructor(model, settings) {
+	constructor(model = LLM_Model.Models.dummy, settings = {}) {
 		this.modelName = model;
 		this.settings = settings;
 
