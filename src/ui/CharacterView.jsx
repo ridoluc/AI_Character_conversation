@@ -67,6 +67,9 @@ function CharacterView({ characterData, setCharacterData }) {
 					<Chip color="primary" size="sm" variant="soft">
 						{characterData.role}
 					</Chip>
+					<Chip color="primary" size="sm" variant="soft">
+						{characterData.social_class}
+					</Chip>
 				</Box>
 				<Typography level="body-sm">
 					{characterData.background}
@@ -94,7 +97,8 @@ function CharacterView({ characterData, setCharacterData }) {
 					}}
 					sx={{ minWidth: "100px" }}
 					onChange={(e) => {
-						const newVal = Number.parseInt(e.target.value)
+						const rawVal = e.target.value ? e.target.value : "0";
+						const newVal = Number.parseInt(rawVal)
 						setGold(newVal);
 						console.log(newVal);
 						setCharacterData({

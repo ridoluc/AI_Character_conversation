@@ -1,7 +1,7 @@
 export const default_game_data = {
-	NPC_job: ["Merchant", "Soldier", "Alchemist", "Farmer", "Scholar"],
+	NPC_job: ["Merchant", "Soldier", "Alchemist", "Farmer", "Scholar", "Sorcerer", "Thief", "Warrior", "Priest", "Explorer", "Nomad", "Mercenary"],
 
-	NPC_social_class: ["Noble", "Commoner", "Outcast", "Royal"],
+	NPC_social_class: ["Noble", "Commoner", "Outcast", "Royal", "Peasant"],
 
 	NPC_qualities: [
 		{ courage: { adjective: "Courageous", antonym: "Cowardly" } },

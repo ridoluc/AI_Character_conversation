@@ -1,28 +1,33 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
 	Sheet,
-	List,
-	ListItem,
-	ListItemContent,
-	Input,
 	Button,
 	Textarea,
 	Stack,
-	Typography,
 } from "@mui/joy";
-import SendIcon from "@mui/icons-material/Send";
 
-function ConversationContext() {
-	const [prompt, setPrompt] = useState("");
+import { initialiseConversation } from "../chat_engine/NPC_Conversation";
+
+function ConversationContext({character, prompt, setPrompt}) {
+
+	useEffect(() => {
+		const str = initialiseConversation(character);
+		setPrompt(str);
+	},[character])
+
+	const onClickHandle = () => {
+
+	}
+
 
 	return (
 		<Sheet>
 			<Textarea
            minRows={10}
            maxRows={16}
-				sx={{ fontSize: "xs"}}
+				sx={{ fontSize: "sm"}}
 				value={prompt}
-				onChange={(e) => setPrompt(e.target.value)}
+				// onChange={(e) => setPrompt(e.target.value)}
 			></Textarea>
 			<Stack
 				direction="row"
@@ -32,7 +37,7 @@ function ConversationContext() {
 				sx={{ mt: 1 }}
 			>
 
-				<Button size="sm" color="primary">
+				<Button size="sm" color="primary" onClick={onClickHandle}>
 					Start Conversation
 				</Button>
 			</Stack>
