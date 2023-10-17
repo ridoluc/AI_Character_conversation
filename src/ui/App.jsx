@@ -19,7 +19,26 @@ export default function App() {
 	const [character, setCharater] = useState(new Character(0, AImodel, {name:"Eadric Hartwell",role:"Farmer", social_class:"Commoner", background:'Eadric Hartwell, a humble farmer from the commoner class, toiled in the fertile lands for decades, reaping the bounty of his labor. With wisdom that comes from age, Eadric faces new adventures, leaving his peaceful life behind, driven by a mysterious call to protect his land.'}));
   const [conversation, setConversation] = useState(new NPCConversation(AImodel,character));
   const [prompt, setPrompt] = useState(initialiseConversation(character));
+  const [messages, setMessages] = useState([]);
+  const [conversation_started, setConversation_started] = useState(false)
 
+
+  const  handleStartConversation = async () =>{
+
+    setConversation_started(true)
+    setMessages((prevMessages) => [...prevMessages, prompt]);
+
+    const initial_response = await conversation.startConversation(prompt);
+
+    setMessages((prevMessages) => [...prevMessages, initial_response]);
+
+
+  }
+
+  const handleCloseConversation = () =>{
+    setMessages([]);
+    setConversation_started(false);
+  }
   // useEffec t(() => {
 
     
@@ -61,12 +80,12 @@ export default function App() {
 				</Grid>
 				<Grid xs={8} md={4}>
 					<CustomSheet title="Initialisation">
-						<ConversationContext character={character} prompt={prompt} setPrompt={setPrompt}/>
+						<ConversationContext character={character} prompt={prompt} setPrompt={setPrompt} onClickHandle={handleStartConversation} conversation_started={conversation_started}/>
 					</CustomSheet>
 				</Grid>
 				<Grid xs={8} md={4} lg={5}>
 					<CustomSheet title="conversation">
-						<ChatContainer />
+						<ChatContainer messages={messages} setMessages={setMessages} onCloseClick={handleCloseConversation} conversation={conversation}/>
 					</CustomSheet>
 				</Grid>
 			</Grid>

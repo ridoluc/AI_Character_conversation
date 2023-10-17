@@ -79,12 +79,14 @@ export class NPCConversation {
 			this.messagesStream.push(msg);
 
 			try {
-				const response = this.LLM_Model.generateResponse(
+				const response = await this.LLM_Model.generateResponse(
 					this.messagesStream
 				);
 				this.messagesStream.push(response);
+				console.log(response);
 
-				return;
+				return response.content;
+				
 			} catch (error) {
 				console.error("Chat error:", error);
 			}
@@ -104,6 +106,18 @@ export function initialiseConversation(character){
 	context += `Character name: ${character.name}\n`
 	context += `Character background: ${character.background}\n`;
 
+	//Character statistics
+	if (character.statistics && character.statistics.length) {
+		let qualitites = character.statistics;
+		let str = ``;
+		for (let i = 0; i < qualitites.length -1; i++)
+			str += qualitites[i] + ", ";
+
+		if (qualitites.length>1) str += "and ";
+		str += qualitites[qualitites.length - 1];
+		context += `${character.name} is ${str}.\n`;
+	}
+
 	// Character inventory
 	let items_owned = "";
 	if (character.inventory.items) {
@@ -116,17 +130,7 @@ export function initialiseConversation(character){
 
 	context += `The character owns these objects: ${character.inventory.gold} gold${items_owned}\n`;
 
-	//Character statistics
-	if (character.statistics && character.statistics.length) {
-		let qualitites = character.statistics;
-		let str = ``;
-		for (let i = 0; i < qualitites.length -1; i++)
-			str += qualitites[i] + ", ";
 
-		if (qualitites.length>1) str += "and ";
-		str += qualitites[qualitites.length - 1];
-		context += `${character.name} is ${str}.\n`;
-	}
 
 	// Player info
 	// context  += this.player_info;

@@ -8,16 +8,12 @@ import {
 
 import { initialiseConversation } from "../chat_engine/NPC_Conversation";
 
-function ConversationContext({character, prompt, setPrompt}) {
+function ConversationContext({character, prompt, setPrompt, onClickHandle, conversation_started}) {
 
 	useEffect(() => {
 		const str = initialiseConversation(character);
 		setPrompt(str);
 	},[character])
-
-	const onClickHandle = () => {
-
-	}
 
 
 	return (
@@ -27,7 +23,7 @@ function ConversationContext({character, prompt, setPrompt}) {
            maxRows={16}
 				sx={{ fontSize: "sm"}}
 				value={prompt}
-				// onChange={(e) => setPrompt(e.target.value)}
+				onChange={(e) => setPrompt(e.target.value)}
 			></Textarea>
 			<Stack
 				direction="row"
@@ -37,7 +33,7 @@ function ConversationContext({character, prompt, setPrompt}) {
 				sx={{ mt: 1 }}
 			>
 
-				<Button size="sm" color="primary" onClick={onClickHandle}>
+				<Button size="sm" color="primary" onClick={onClickHandle} disabled={conversation_started}>
 					Start Conversation
 				</Button>
 			</Stack>
