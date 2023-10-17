@@ -37,6 +37,7 @@ export default function App() {
 
   const handleCloseConversation = () =>{
     setMessages([]);
+	 conversation.messagesStream = []
     setConversation_started(false);
   }
   // useEffec t(() => {

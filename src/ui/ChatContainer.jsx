@@ -9,11 +9,12 @@ import {
 	Textarea,
 	Stack,
 	Typography,
+	Avatar,
+	Box,
 } from "@mui/joy";
 import SendIcon from "@mui/icons-material/Send";
 
 function ChatContainer({ messages, setMessages, onCloseClick, conversation }) {
-	// const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState("");
 	const chatContainerRef = useRef();
 
@@ -38,30 +39,57 @@ function ChatContainer({ messages, setMessages, onCloseClick, conversation }) {
 		<Sheet>
 			<Sheet
 				ref={chatContainerRef}
-				sx={{ mb: 2, height: 300, borderRadius: 4, overflow: "auto" }}
+				sx={{
+					mb: 2,
+					p: 2,
+					height: 400,
+					borderRadius: 4,
+					overflow: "auto",
+				}}
 				variant="soft"
 			>
-				<List>
+				<Stack spacing={2} justifyContent="flex-end">
 					{messages.map((message, index) => (
-						<ListItem
-							variant="soft"
+						<Stack
 							key={index}
-							sx={{
-								mb: 1,
-								mx: 1,
-								borderRadius: 3,
-								bgcolor: "primary.100",
-							}}
+							direction="row"
+							spacing={2}
+							//   flexDirection={isYou ? 'row-reverse' : 'row'}
 						>
-							<ListItemContent>
-								<Typography level="body-sm">
-									{message}
-								</Typography>
-							</ListItemContent>
-						</ListItem>
+							<Avatar variant="solid">TS</Avatar>
+
+							<Box sx={{ maxWidth: "60%", minWidth: "auto" }}>
+								<Stack
+									direction="row"
+									justifyContent="space-between"
+									spacing={2}
+									sx={{ mb: 0.25 }}
+								>
+									<Typography level="body-xs">
+										Sender Name
+									</Typography>
+								</Stack>
+								<Sheet
+									color="primary"
+									variant="solid"
+									sx={{
+										p: 1.25,
+										borderRadius: "lg",
+										borderTopRightRadius: "lg",
+										borderTopLeftRadius: 0,
+										backgroundColor: "primary.200",
+									}}
+								>
+									<Typography level="body-sm">
+										{message}
+									</Typography>
+								</Sheet>
+							</Box>
+						</Stack>
 					))}
-				</List>
+				</Stack>
 			</Sheet>
+
 			<Textarea
 				value={newMessage}
 				onChange={(e) => setNewMessage(e.target.value)}
@@ -75,7 +103,7 @@ function ChatContainer({ messages, setMessages, onCloseClick, conversation }) {
 					<Button
 						color="primary"
 						variant="outlined"
-            size="sm"
+						size="sm"
 						onClick={handleSendMessage}
 						sx={{ ml: "auto" }}
 						endDecorator={<SendIcon />}
