@@ -9,29 +9,29 @@ export class LLM_Model {
 	 * @param {string} model - The model name (e.g., 'dummy' or 'open_ai').
 	 * @param {Object} settings - Model-specific settings and API key.
 	 */
-	constructor(model = LLM_Model.Models.dummy, settings = {}) {
+	constructor(model = LLM_Model.Models.dummy, settings = {dangerouslyAllowBrowser: true }) {
 		this.modelName = model;
 		this.settings = settings;
 
 		if (!Object.values(LLM_Model.Models).includes(this.modelName)) {
 			throw new Error(`Invalid model name: ${this.modelName}`);
 		}
-	}
 
-	/**
-	 * Generate a response based on the selected model.
-	 * @param {Array} messages - An array of messages for the conversation.
-	 * @returns {Promise<string>} - A Promise that resolves with the generated response.
-	 */
-	async generateResponse(messages) {
-		switch (this.modelName) {
-			case LLM_Model.Models.dummy:
-				return dummyModel("");
-			case LLM_Model.Models.open_ai:
-				return openAiModel(messages, this.settings);
-			default:
-				break;
-		}
+		/**
+		 * Generate a response based on the selected model.
+		 * @param {Array} messages - An array of messages for the conversation.
+		 * @returns {Promise<string>} - A Promise that resolves with the generated response.
+		 */
+		this.generateResponse = async (messages) => {
+			switch (this.modelName) {
+				case LLM_Model.Models.dummy:
+					return dummyModel("");
+				case LLM_Model.Models.open_ai:
+					return openAiModel(messages, this.settings);
+				default:
+					break;
+			}
+		};
 	}
 
 	/**
@@ -57,6 +57,8 @@ export class LLM_Model {
 async function openAiModel(messages, settings) {
 	const openai = new OpenAI({
 		apiKey: settings.apiKey,
+		dangerouslyAllowBrowser: true 
+
 	});
 
 	try {
@@ -77,7 +79,6 @@ async function openAiModel(messages, settings) {
  * @returns {Promise<string>} - A Promise that resolves with a default message.
  */
 async function dummyModel(message) {
-	
 	return {
 		role: "assistant",
 		content: `TEST MESSAGE FROM DUMMY MODEL`,

@@ -10,6 +10,7 @@ import Typography from '@mui/joy/Typography';
 import Radio from '@mui/joy/Radio';
 import RadioGroup from '@mui/joy/RadioGroup';
 import Stack from '@mui/joy/Stack';
+import { LLM_Model } from '../chat_engine/LLM_Model';
 
 function SettingsPane({model, onModelChange}) {
   const [open, setOpen] = React.useState(false);
@@ -23,40 +24,35 @@ function SettingsPane({model, onModelChange}) {
   };
 
   const onMdlSelectionChange = (d) => {
+    let mdl_name;
+    let settings=model.settings;
 
     switch (d) {
       case "dummy":
-        onModelChange({...model, modelName: 0});
+        mdl_name =0;
+        settings.model = "dummy";
+
         break;
       case "gpt3":
-        onModelChange({
-          ...model,
-          modelName : 1,
-          settings:{
-            ...model.settings,
-            model:"gpt-3.5-turbo"
-          }}
-        )
+        mdl_name =1;
+        settings.model = "gpt-3.5-turbo";
         break;
       case "gpt4":
-        onModelChange({
-          ...model,
-          modelName : 1,
-          settings:{
-            ...model.settings,
-            model:"gpt-4"
-          }}
-        )
+        mdl_name =1;
+        settings.model = "gpt-4";
         break;
       default:
-        onModelChange({...model, modelName: 0});
+        mdl_name =0;
         break;
     }
-    
+    // onModelChange((prevModel) => ({...prevModel, modelName: mdl_name, settings:settings}));
+    onModelChange(new LLM_Model(model=mdl_name, settings=settings));
+    console.log(model);
   }
 
   const onApiChange = (d) => {
-    model.settings = {...model.settings, apiKey:d}
+    onModelChange((prevModel) => ({...prevModel, settings:{...prevModel.settings, apiKey:d}}));
+
   }
 
 

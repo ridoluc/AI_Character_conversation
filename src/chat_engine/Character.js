@@ -19,15 +19,15 @@ export class Character {
 		/**
 		 * Generate the character background
 		 */
-		this.generateBackground = async () => {
+		this.generateBackground = async (llm_model) => {
 			const prompt = `Write the background story and name for an RPG character using the following data, in less than 150 tokens: 
 		\nrole: ${this.role}, \nSocial Extraction: ${this.social_class}, \nAge:${this.age}\nReturn a JSON object containing "background" and "name" properties`;
 
 			const messages = [];
-			messages.push(LLM_Model.createRoleContentPair("user", prompt));
+			messages.push(LLM_Model.createRoleContentPair(prompt,"user"));
 
 			try {
-				const response = await this.ai_model.generateResponse(messages);
+				const response = await llm_model.generateResponse(messages);
 
 				const parsed_response = this.safeParseBackground(
 					response.content

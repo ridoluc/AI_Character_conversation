@@ -19,7 +19,7 @@ import {
 import { default_game_data } from "../../data/defaults";
 import { Character } from "../chat_engine/Character.js";
 
-function NewCharacter({ characterData, onDataChange }) {
+function NewCharacter({ characterData, onDataChange, llm_model }) {
 	// Hook for the modal state (open,closed)
 	const [open, setOpen] = React.useState(false);
 
@@ -37,7 +37,7 @@ function NewCharacter({ characterData, onDataChange }) {
 	const [background, setBackground] = React.useState(characterData.background);
 
 	const handleGenerate = async () => {
-		characterData = await characterData.generateBackground();
+		characterData = await characterData.generateBackground(llm_model);
 
 		onDataChange(characterData);
 		const generatedName = characterData.name;

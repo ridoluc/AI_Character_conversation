@@ -14,16 +14,22 @@ import {
 } from "@mui/joy";
 import SendIcon from "@mui/icons-material/Send";
 
-function ChatContainer({ messages, setMessages, onCloseClick, conversation }) {
+function ChatContainer({ messages, setMessages, onCloseClick, conversation , llm_model}) {
 	const [newMessage, setNewMessage] = useState("");
 	const chatContainerRef = useRef();
 
 	const handleSendMessage = async () => {
 		if (newMessage.trim() !== "") {
-			setMessages((prevMessages) => [...prevMessages, newMessage]);
-			const response = await conversation.chat(newMessage);
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{ content: newMessage, sender: "Player" },
+			]);
+			const response = await conversation.chat(newMessage, llm_model);
 
-			setMessages((prevMessages) => [...prevMessages, response]);
+			setMessages((prevMessages) => [
+				...prevMessages,
+				{ content: response, sender: "Character" },
+			]);
 
 			setNewMessage("");
 		}
@@ -49,44 +55,67 @@ function ChatContainer({ messages, setMessages, onCloseClick, conversation }) {
 				variant="soft"
 			>
 				<Stack spacing={2} justifyContent="flex-end">
-					{messages.map((message, index) => (
-						<Stack
-							key={index}
-							direction="row"
-							spacing={2}
-							//   flexDirection={isYou ? 'row-reverse' : 'row'}
-						>
-							<Avatar variant="solid">TS</Avatar>
-
-							<Box sx={{ maxWidth: "60%", minWidth: "auto" }}>
-								<Stack
-									direction="row"
-									justifyContent="space-between"
-									spacing={2}
-									sx={{ mb: 0.25 }}
-								>
-									<Typography level="body-xs">
-										Sender Name
-									</Typography>
-								</Stack>
-								<Sheet
-									color="primary"
-									variant="solid"
-									sx={{
-										p: 1.25,
-										borderRadius: "lg",
-										borderTopRightRadius: "lg",
-										borderTopLeftRadius: 0,
-										backgroundColor: "primary.200",
-									}}
-								>
-									<Typography level="body-sm">
-										{message}
-									</Typography>
-								</Sheet>
-							</Box>
-						</Stack>
-					))}
+					{messages.map((message, index) => {
+						const isPlayer =
+							message.sender === "Player" ? true : false;
+						return (
+							<Stack
+								key={index}
+								direction="row"
+								spacing={2}
+								flexDirection={isPlayer ? "row-reverse" : "row"}
+							>
+								{message.sender !== "Player" && (
+									<Avatar variant="solid">
+										{message.sender === "Player"
+											? "PL"
+											: message.sender === "Character"
+											? "CH"
+											: "SY"}
+									</Avatar>
+								)}
+								<Box sx={{ maxWidth: "60%", minWidth: "10%" }}>
+									<Stack
+										direction="row"
+										justifyContent="space-between"
+										spacing={2}
+										sx={{ mb: 0.25 }}
+									>
+										<Typography level="body-xs">
+											{message.sender}
+										</Typography>
+									</Stack>
+									<Sheet
+										variant="solid"
+										sx={{
+											p: 1.25,
+											borderRadius: "lg",
+											borderTopRightRadius: isPlayer
+												? 0
+												: "lg",
+											borderTopLeftRadius: isPlayer
+												? "lg"
+												: 0,
+											backgroundColor:
+												message.sender === "Player"
+													? "primary.200"
+													: message.sender ===
+													  "Character"
+													? "neutral.50"
+													: message.sender ===
+													  "System"
+													? "warning.50"
+													: undefined, // Set a default color or handle other cases
+										}}
+									>
+										<Typography level="body-sm">
+											{message.content}
+										</Typography>
+									</Sheet>
+								</Box>
+							</Stack>
+						);
+					})}
 				</Stack>
 			</Sheet>
 
